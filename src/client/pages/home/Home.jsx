@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import Button from 'material-ui/Button';
-import Layout from "../../../components/Layout";
+import Layout from "../../layouts/Layout";
 import {Link} from 'react-router-dom'
 import {renderRoutes} from "react-router-config";
-import InputPreview from "../../../components/InputPreview";
+import InputPreview from "../../components/input/InputPreview";
 import {connect} from 'react-redux';
 import {setMessage} from "../../redux/actions/message";
 import {bindActionCreators} from 'redux';
@@ -19,7 +19,7 @@ class Home extends Component {
         return (
             <Layout test_prop="kghkjhjk">
                 <div>
-                    <h1>This is HOME Page.</h1>
+                    <h1>This is HOME mjsgkaghsk Page.</h1>
                     <Link to="/about">About</Link>
                     <Button variant="raised" color="primary"
                             onClick={() => this.props.changePage()}>About</Button>

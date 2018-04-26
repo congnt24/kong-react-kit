@@ -10,7 +10,12 @@ const main_routes = [
                 component: Home
             },
             { path: '/home',
-                component: Home
+                component: Home,
+                routes: [
+                    { path: '/home/about',
+                        component: About
+                    }
+                ]
             },
             { path: '/about',
                 component: About

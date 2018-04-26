@@ -6,7 +6,7 @@ class Layout extends Component {
     render() {
         return (
             <div>
-                <div><p>breadcrumb {this.props.test_prop}: {this.props.router.location.pathname}</p></div>
+                <div><p>breadcrumb {this.props.test_prop}: </p></div>
                 {this.props.children}
             </div>
         );
@@ -16,5 +16,5 @@ class Layout extends Component {
 export default connect(state => state)(Layout);
 
 Layout.propTypes = {
-    test_prop: PropTypes.number.isRequired
+    test_prop: PropTypes.string
 }

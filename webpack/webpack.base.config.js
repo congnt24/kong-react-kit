@@ -8,7 +8,7 @@ const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 
 const webpack_base_config = {
     //development or production: production webpack sẽ auto optimize
-    // mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     resolve: {
         extensions: ['.js', '.jsx']
     },
