@@ -5,14 +5,14 @@ import RootRouter from "../client/containers/RootRouter";
 const main_routes = [
     { component: RootRouter,
         routes: [
-            { path: '/',
+            { path: /* webpackChunkName: "home" */'/',
                 exact: true,
                 component: Home
             },
             { path: '/home',
                 component: Home,
                 routes: [
-                    { path: '/home/about',
+                    { path:  '/home/about',
                         component: About
                     }
                 ]

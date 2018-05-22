@@ -4,7 +4,7 @@ const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 // const staticAssetName = true
 //     ? '[path][name].[ext]?[hash:8]'
 //     : '[hash:8].[ext]';
-
+const isVerbose = true;
 
 const webpack_base_config = {
     //development or production: production webpack sẽ auto optimize
@@ -43,6 +43,18 @@ const webpack_base_config = {
             },
         ]
     },
+    stats: {
+        cached: isVerbose,
+        cachedAssets: isVerbose,
+        chunks: isVerbose,
+        chunkModules: isVerbose,
+        colors: true,
+        hash: isVerbose,
+        modules: isVerbose,
+        reasons: true,
+        timings: true,
+        version: isVerbose,
+    }
 };
 
 module.exports = webpack_base_config;

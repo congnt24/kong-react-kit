@@ -46,6 +46,7 @@
     "start": "webpack-dev-server --config webpack/webpack.config.js",
     "start:build": "webpack --config webpack-server.config.js && babel-node build/server.js",
     "start:server": "webpack --config webpack/webpack.config.js && babel-node src/server",
+    "bundle": "babel-node src/bundle.js",
     "lint": "eslint ."
   },
   "author": "",
