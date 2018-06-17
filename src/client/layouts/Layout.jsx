@@ -6,7 +6,7 @@ class Layout extends Component {
     render() {
         return (
             <div>
-                <div><p>breadcrumb {this.props.test_prop}: </p></div>
+                {/*<div><p>breadcrumb {this.props.test_prop}: </p></div>*/}
                 {this.props.children}
             </div>
         );

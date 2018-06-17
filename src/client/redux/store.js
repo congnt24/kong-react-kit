@@ -4,13 +4,18 @@ import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension';
 import history from "../../commons/history";
 import {routerReducer, routerMiddleware, push} from 'react-router-redux'
-
+import createSagaMiddleware from 'redux-saga'
+import mySaga from "../pages/home/duck/sagas";
+// create the saga middleware
+const sagaMiddleware = createSagaMiddleware();
+import homeReducer from '../pages/home/duck/reducers';
 const enhancers = [];
 const middleware = [
+    sagaMiddleware,
     thunk,//We are using redux-thunk for using async actions
     routerMiddleware(history)
 ];
-const reducers = {messageReducer};
+const reducers = {messageReducer, homeReducer};
 
 const composedEnhancers = composeWithDevTools(
     applyMiddleware(...middleware),
@@ -26,4 +31,7 @@ const store = createStore(
     }),
     composedEnhancers
 );
+sagaMiddleware.run(mySaga);
+
+
 export default store;

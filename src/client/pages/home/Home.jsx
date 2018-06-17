@@ -8,18 +8,28 @@ import {connect} from 'react-redux';
 import {setMessage} from "../../redux/actions/message";
 import {bindActionCreators} from 'redux';
 import {push} from 'react-router-redux';
+import {fetchBannerAction} from "./duck/actions";
+import BannerHomeContainer from './containers/BannerHomeContainer'
+import VntripServices from "./components/VntripServices";
+import HotPlaces from "./components/HotPlaces";
 
 class Home extends Component {
+    constructor(props){
+        super(props)
+    }
     _onChange = (value) => {
         this.props.dispatch(setMessage(value))
     };
 
     render() {
+        this.props.dispatch(fetchBannerAction('home_slideshow'))
         const {message} = this.props.messageReducer;
         return (
             <Layout test_prop="kghkjhjk">
                 <div>
-                    <h1>This is HOME mjsgkaghsk Page.</h1>
+                    <BannerHomeContainer />
+                    <VntripServices/>
+                    <HotPlaces/>
                     <Link to="/about">About</Link>
                     <Button variant="raised" color="primary"
                             onClick={() => this.props.changePage()}>About</Button>
@@ -32,8 +42,11 @@ class Home extends Component {
 }
 
 //Tạo ra các function cho this.pros
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changePage: () => push('/about')
-}, dispatch);
+const mapDispatchToProps = (dispatch) => {
+    let actions = bindActionCreators({
+        changePage: () => push('/about')
+    }, dispatch);
+    return {...actions, dispatch}
+}
 
 export default connect(state => state, mapDispatchToProps)(Home);

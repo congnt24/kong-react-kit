@@ -17,8 +17,8 @@
 │   │           ├── actions.js
 │   │           ├── index.js
 │   │           ├── operations.js
-│   │           ├── reducer.js
-│   │           ├── saga.js
+│   │           ├── reducers.js
+│   │           ├── sagas.js
 │   │           └── types.js
 │   └── redux
 │       ├── actions

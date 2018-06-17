@@ -9,7 +9,7 @@ module.exports = {
     ...webpack_base_config,
     //development or production: production webpack sẽ auto optimize
     //'react-hot-loader/patch': sử dụng để hot loader
-    entry: ['react-hot-loader/patch', './src/client/index.js'],
+    entry: ['react-hot-loader/patch', 'babel-polyfill', './src/client/index.js'],
     output: {
         //chunk js thành các file nhỏ, có thể thay hash = file_name để ko bị thay đổi mỗi khi build lại
         filename: 'bundle.[name].js',

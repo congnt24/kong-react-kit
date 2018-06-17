@@ -6,6 +6,7 @@ import {AppContainer} from 'react-hot-loader'
 
 import {Provider} from 'react-redux';
 import store from './redux/store';
+import '../assets/style.css'
 
 
 //Đây là entry point của webpack -> webpack sẽ compile từ file này dựa trên file html_template

@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 const fs = require('fs');
 const path = require('path');
+const config = require('../configs');
 
 function reducer(state) {
     return state;
