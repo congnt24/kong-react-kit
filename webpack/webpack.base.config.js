@@ -33,7 +33,8 @@ const webpack_base_config = {
                         options: {
                             modules: true,
                             camelCase: true,
-                            sourceMap: true
+                            sourceMap: true,
+                            localIdentName: "[local]___[hash:base64:5]"
                         }
                     },
                     {

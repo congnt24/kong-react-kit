@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from "react-slick";
+import './style.scss'
 class BannerHome extends React.Component {
     render() {
         let settings = {
