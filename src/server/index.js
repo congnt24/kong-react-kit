@@ -11,13 +11,14 @@ const app = express();
 const fs = require('fs');
 const path = require('path');
 const config = require('../configs');
+import Loadable from 'react-loadable';
 
 function reducer(state) {
     return state;
 }
 
-let template_html = fs.readFileSync(path.resolve(__dirname, '../../public/index.html'), 'utf-8');
-
+let template_html = fs.readFileSync(path.resolve('./public/index.html'), 'utf-8');
+app.use(express.static('build'));
 // express will serve up index.html if it doesn't recognize the route
 app.get('*', (req, res) => {
     let context = {};
@@ -30,9 +31,9 @@ app.get('*', (req, res) => {
     );
     console.log(content, 'content');
     
-    // content = template_html.replace('<\!--REPLACE_ME-->', content)
-    //     .replace('<\!--REPLACE_SCRIPT-->', `<script type="text/javascript" src="/bundle.main.js"></script>`);
-    // console.log(content, 'content');
+    content = template_html.replace('<!--REPLACE_ME-->', content)
+        .replace('<!--REPLACE_SCRIPT-->', `<script type="text/javascript" src="/vendor.js"></script> <script type="text/javascript" src="/client.js"></script>`);
+    console.log(content, 'content');
 
     res.send(content)
 
@@ -108,4 +109,11 @@ app.get('*', (req, res) => {
 
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
+const renderSSR = function(req, res){
+
+}
+
+Loadable.preloadAll().then(() => {
+    app.listen(port, () => console.log(`Listening on port ${port}`));
+});

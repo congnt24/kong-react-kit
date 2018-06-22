@@ -8,17 +8,17 @@ let HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = { ...webpack_base_config,
     //'react-hot-loader/patch': sử dụng để hot loader
-    entry: './src/index.js',
+    entry: './src/server/index.js',
     output: {
         //chunk js thành các file nhỏ, có thể thay hash = file_name để ko bị thay đổi mỗi khi build lại
-        filename: 'index.js',
-        path: path.resolve(__dirname, './build'),
+        filename: 'server.js',
+        path: path.resolve('./build'),
         publicPath: "/"
     },
     externals: nodeExternals(),
     target: "node",
     module: {
-        rules: [{
+        rules: [{confirmed_by_idAND
                 // Khi gặp các file có extension là js hoặc jsx -> sử dụng babel-loader để bundle
                 test: /\.jsx?$/,
                 exclude: /node_module/,
@@ -27,10 +27,10 @@ module.exports = { ...webpack_base_config,
         ]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: `'production'`
-            }
-        })
+        // new webpack.DefinePlugin({
+        //     'process.env': {
+        //         NODE_ENV: `'production'`
+        //     }
+        // })
     ],
 };

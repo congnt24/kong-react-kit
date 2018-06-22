@@ -12,6 +12,8 @@ import {fetchBannerAction} from "./duck/actions";
 import BannerHomeContainer from './containers/BannerHomeContainer'
 import VntripServices from "./components/VntripServices";
 import HotPlaces from "./components/HotPlaces";
+import Loadable from 'react-loadable';
+
 
 class Home extends Component {
     constructor(props){
@@ -20,9 +22,11 @@ class Home extends Component {
     _onChange = (value) => {
         this.props.dispatch(setMessage(value))
     };
+    componentDidMount(){
+        this.props.dispatch(fetchBannerAction('home_slideshow'))
+    }
 
     render() {
-        this.props.dispatch(fetchBannerAction('home_slideshow'))
         const {message} = this.props.messageReducer;
         return (
             <Layout test_prop="kghkjhjk">

@@ -1,0 +1,17 @@
+{
+  "client": {
+    "css": "/client.css",
+    "js": "/client.js"
+  },
+  "vendor": {
+    "js": "/vendor.js"
+  },
+  "": {
+    "js": "/0.js",
+    "ico": "/favicon.ico",
+    "html": "/index.html"
+  },
+  "metadata": {
+    "author": "kongnt89"
+  }
+}

@@ -5,13 +5,16 @@ const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 //     ? '[path][name].[ext]?[hash:8]'
 //     : '[hash:8].[ext]';
 const isVerbose = true;
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack_base_config = {
     //development or production: production webpack sẽ auto optimize
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     resolve: {
         extensions: ['.js', '.jsx']
     },
+    plugins: [
+        new MiniCssExtractPlugin()
+    ],
     module: {
         rules: [
             {
@@ -25,9 +28,8 @@ const webpack_base_config = {
                 // include: paths.appSrc,
                 exclude: /node_module/,
                 use: [
-                    {
-                        loader: "style-loader" // creates style nodes from JS strings
-                    },
+                    // 'style-loader',
+                    MiniCssExtractPlugin.loader,
                     {
                         loader: "css-loader", // translates CSS into CommonJS
                         options: {
@@ -37,9 +39,7 @@ const webpack_base_config = {
                             localIdentName: "[local]___[hash:base64:5]"
                         }
                     },
-                    {
-                        loader: "sass-loader" // compiles Sass to CSS
-                    }
+                    'sass-loader'
                 ]
             },
         ]

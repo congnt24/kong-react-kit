@@ -16,12 +16,3 @@ Promise.prototype.executeHttp = function () {
         });
     })
 };
-
-Promise.prototype.executeHttpSaga = async function () {
-    let result = await this();
-    if (result.status === 'success') {
-        return ()=>result
-    } else {
-        return ()=>result
-    }
-};
