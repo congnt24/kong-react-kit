@@ -1,5 +1,5 @@
 let webpack_base_config = require("./webpack.base.config");
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 let path = require('path');
 let webpack = require('webpack');
 
@@ -8,7 +8,8 @@ const AssetsPlugin = require('assets-webpack-plugin');
 const assetsPluginInstance = new AssetsPlugin({
     filename: 'assets.json',
     prettyPrint: true,
-    metadata: {author: 'kongnt89'}
+    metadata: {author: 'kongnt89'},
+    manifestFirst: true,
 });
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -33,11 +34,6 @@ module.exports = {
     },
     plugins: [
         ...webpack_base_config.plugins,
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-            }
-        }),
         new CleanWebpackPlugin(['build'],{
             root: process.cwd()
         }),
@@ -60,6 +56,11 @@ module.exports = {
         //     minRatio: 0.8
         // })
     ],
+    module: {
+        rules: [
+            ...webpack_base_config.module.rules
+        ]
+    },
     optimization: {
         runtimeChunk: false,
         splitChunks: {
@@ -85,13 +86,13 @@ module.exports = {
                 }
             }
         },
-        minimizer: [
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
-                sourceMap: true
-            })
-        ]
+        // minimizer: [
+        //     new UglifyJsPlugin({
+        //         cache: true,
+        //         parallel: true,
+        //         sourceMap: true
+        //     })
+        // ]
     },
     // Sử dụng dev Server: hot = true -> sử dụng hot reload
     devServer: {

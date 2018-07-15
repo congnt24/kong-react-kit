@@ -1,3 +1,6 @@
+let webpack = require('webpack');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 const reScript = /\.(js|jsx|mjs)$/;
 const reStyle = /\.(css|less|styl|scss|sass|sss)$/;
 const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
@@ -5,7 +8,6 @@ const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 //     ? '[path][name].[ext]?[hash:8]'
 //     : '[hash:8].[ext]';
 const isVerbose = true;
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack_base_config = {
     //development or production: production webpack sẽ auto optimize
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -13,6 +15,11 @@ const webpack_base_config = {
         extensions: ['.js', '.jsx']
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+            }
+        }),
         new MiniCssExtractPlugin()
     ],
     module: {

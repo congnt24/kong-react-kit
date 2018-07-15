@@ -6,7 +6,17 @@ const nodeExternals = require('webpack-node-externals');
 
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = { ...webpack_base_config,
+const AssetsPlugin = require('assets-webpack-plugin');
+const assetsPluginInstance = new AssetsPlugin({
+    filename: 'assets2.json',
+    prettyPrint: true,
+    metadata: {author: 'kongnt89'},
+    manifestFirst: true,
+});
+
+
+module.exports = {
+    ...webpack_base_config,
     //'react-hot-loader/patch': sử dụng để hot loader
     entry: './src/server/index.js',
     output: {
@@ -18,19 +28,13 @@ module.exports = { ...webpack_base_config,
     externals: nodeExternals(),
     target: "node",
     module: {
-        rules: [{confirmed_by_idAND
-                // Khi gặp các file có extension là js hoặc jsx -> sử dụng babel-loader để bundle
-                test: /\.jsx?$/,
-                exclude: /node_module/,
-                use: ['babel-loader'],
-            }
+        rules: [
+            ...webpack_base_config.module.rules
         ]
     },
+
     plugins: [
-        // new webpack.DefinePlugin({
-        //     'process.env': {
-        //         NODE_ENV: `'production'`
-        //     }
-        // })
+        assetsPluginInstance,
+        ...webpack_base_config.plugins
     ],
 };
