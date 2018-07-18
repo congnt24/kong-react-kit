@@ -1,5 +1,5 @@
-import Home from "../client/pages/home/Home";
-import About from "../client/pages/about/About";
+import Home from "../client/pages/home/index.js";
+import About from "../client/pages/about/index.js";
 import RootRouter from "../client/containers/RootRouter";
 import NotFound from "../commons/NotFound";
 
@@ -16,7 +16,6 @@ const main_routes = [
                 path: '/home',
                 exact: true,
                 component: Home,
-                title: 'fjkshgjdhfsjkghdfskjhjkdfshgjkdfs',
                 routes: [
                     {
                         path: '/home/about',

@@ -20,7 +20,6 @@ const webpack_base_config = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             }
         }),
-        new MiniCssExtractPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin(),
@@ -32,25 +31,6 @@ const webpack_base_config = {
                 test: reScript,
                 exclude: /node_module/,
                 use: ['babel-loader'],
-            },
-            {// Khi gặp các file có extension là css -> sử dụng css-loader và style-loader để compile
-                test: reStyle,
-                // include: paths.appSrc,
-                exclude: /node_module/,
-                use: [
-                    // 'style-loader',
-                    MiniCssExtractPlugin.loader,
-                    {
-                        loader: "css-loader", // translates CSS into CommonJS
-                        options: {
-                            modules: true,
-                            camelCase: true,
-                            sourceMap: true,
-                            localIdentName: "[local]___[hash:base64:5]"
-                        }
-                    },
-                    'sass-loader'
-                ]
             },
         ]
     },

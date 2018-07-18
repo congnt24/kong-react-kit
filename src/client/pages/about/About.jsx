@@ -3,13 +3,15 @@ import {fetchBannerAction} from "./duck/actions";
 import {connect} from "react-redux";
 import BannerAboutContainer from './containers/BannerAboutContainer'
 import Helmet from 'react-helmet';
+import Loading from "../../components/loading/Loading";
+import Loadable from "react-loadable";
 
 class About extends Component {
     componentWillMount() {
         //Use for ssr saga
-        // if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
+        if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
         this.props.dispatch(fetchBannerAction('home_slideshow'))
-        // }
+        }
     }
 
     render() {
@@ -25,5 +27,4 @@ class About extends Component {
         );
     }
 }
-
-export default connect(state => state, null)(About);
+export default About

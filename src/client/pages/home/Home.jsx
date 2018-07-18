@@ -19,11 +19,11 @@ class Home extends Component {
 
     componentWillMount() {
         //Use for ssr saga
-        // if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
+        if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
             this.props.dispatch(fetchBannerAction('home_slideshow'))
-        // } else {
-        //     window.__INITIAL_STATE__ = undefined
-        // }
+        } else {
+            window.__INITIAL_STATE__ = undefined
+        }
     }
 
     render() {
@@ -43,12 +43,4 @@ class Home extends Component {
     }
 }
 
-//Tạo ra các function cho this.pros
-const mapDispatchToProps = (dispatch) => {
-    let actions = bindActionCreators({
-        changePage: () => push('/about')
-    }, dispatch);
-    return {...actions, dispatch}
-}
-
-export default connect(state => state, mapDispatchToProps)(Home);
+export default Home

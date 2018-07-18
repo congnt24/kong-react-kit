@@ -6,6 +6,7 @@ ADD . /app
 RUN ls
 RUN npm i
 RUN npm run build
+#RUN ls | egrep '[^public|build|pm2.json]' | xargs rm -rf
 RUN ls
 EXPOSE 3000
 CMD ["pm2-docker", "start", "pm2.json"]

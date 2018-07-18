@@ -1,3 +1,6 @@
+if (!global._babelPolyfill) {
+    require('babel-polyfill');
+}
 import path from 'path';
 import logger from 'morgan';
 import favicon from 'serve-favicon';
@@ -20,6 +23,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 const config = require('../configs');
 let prototype = require('../utils/prototype');
+console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
 
 if (process.env.NODE_ENV === 'development') {
 //SETUP HMR express
@@ -38,6 +42,8 @@ if (process.env.NODE_ENV === 'development') {
         path: "/__webpack_hmr",
         heartbeat: 10 * 1000
     }));
+} else {
+    app.use(express.static(path.resolve(process.cwd(), 'build'), {index: '_'}));
 }
 //SETUP seo
 app.use(helmet());
@@ -45,33 +51,8 @@ app.use(logger('dev', {skip: (req, res) => res.statusCode < 400}));
 app.use(favicon(path.resolve(process.cwd(), 'public/favicon.ico')));
 
 // if (__DEV__) {
-app.use(express.static(path.resolve(process.cwd(), 'build'), {index: '_'}));
-// } else {
-//     /* Run express as webpack dev server */
-//     const webpack = require('webpack');
-//     const webpackConfig = require('../tools/webpack/config.babel');
-//     const compiler = webpack(webpackConfig);
-//
-//     compiler.apply(new webpack.ProgressPlugin());
-//
-//     app.use(
-//         require('webpack-dev-middleware')(compiler, {
-//             publicPath: webpackConfig.output.publicPath,
-//             headers: { 'Access-Control-Allow-Origin': '*' },
-//             hot: true,
-//             quiet: true, // Turn it on for friendly-errors-webpack-plugin
-//             noInfo: true,
-//             stats: 'minimal',
-//             serverSideRender: true
-//         })
-//     );
-//
-//     app.use(
-//         require('webpack-hot-middleware')(compiler, {
-//             log: false // Turn it off for friendly-errors-webpack-plugin
-//         })
-//     );
-// }
+
+
 // express will serve up index.html if it doesn't recognize the route
 app.get('*', (req, res, next) => {
     // const branch = matchRoutes(main_routes, req.path);
@@ -80,6 +61,13 @@ app.get('*', (req, res, next) => {
     let context = {};
     store.runSaga(rootSaga).done.then(() => {
         const data = {};
+        content = renderToString(
+            <Provider store={store}>
+                <StaticRouter location={req.url} context={context}>
+                    {renderRoutes(main_routes)}
+                </StaticRouter>
+            </Provider>
+        );
         data.helmet = Helmet.renderStatic();
         data.children = content;
         const css = new Set();
@@ -87,7 +75,7 @@ app.get('*', (req, res, next) => {
         for (let key of Object.keys(assets)) {
             let asset = assets[key];
             if (asset['js']) {
-                scripts.add(asset['js']);
+                // scripts.add(asset['js']);
             }
             if (asset['css']) {
                 css.add(asset['css']);
@@ -95,8 +83,10 @@ app.get('*', (req, res, next) => {
         }
 
         data.scripts = Array.from(scripts);
-        data.styles = Array.from(css);
+        data.styles = Array.from(css).flatten();
         data.initial_state = store.getState();
+        console.log(data, 'data');
+        
         const html = renderToStaticMarkup(<Html {...data} />);
         res.status(200);
         res.send(`<!doctype html>${html}`);

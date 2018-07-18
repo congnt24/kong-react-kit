@@ -2,6 +2,7 @@ let webpack_base_config = require("./webpack.base.config");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 let path = require('path');
 let webpack = require('webpack');
+const reStyle = /\.(css|less|styl|scss|sass|sss)$/;
 
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
@@ -34,6 +35,7 @@ module.exports = {
     },
     plugins: [
         ...webpack_base_config.plugins,
+        new MiniCssExtractPlugin(),
         new CleanWebpackPlugin(['build'],{
             root: process.cwd()
         }),
@@ -58,7 +60,26 @@ module.exports = {
     ],
     module: {
         rules: [
-            ...webpack_base_config.module.rules
+            ...webpack_base_config.module.rules,
+            {// Khi gặp các file có extension là css -> sử dụng css-loader và style-loader để compile
+                test: reStyle,
+                // include: paths.appSrc,
+                exclude: /node_module/,
+                use: [
+                    // 'style-loader',
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: "css-loader", // translates CSS into CommonJS
+                        options: {
+                            modules: true,
+                            camelCase: true,
+                            sourceMap: true,
+                            localIdentName: "[local]___[hash:base64:5]"
+                        }
+                    },
+                    'sass-loader'
+                ]
+            },
         ]
     },
     optimization: {

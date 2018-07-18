@@ -12,7 +12,7 @@
     "history": "^4.7.2",
     "material-ui": "^1.0.0-beta.38",
     "moment": "^2.22.2",
-    "npm": "^6.1.0",
+    "npm": "^6.2.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
@@ -63,9 +63,9 @@
   },
   "scripts": {
     "start:client": "webpack-dev-server --config webpack/webpack.config.js",
-    "start:server": "NODE_ENV=development webpack --config webpack/webpack.server.config.js && babel-node build/server.js",
+    "start:server": "NODE_ENV=development webpack --config webpack/webpack.server.config.js && node build/server.js",
     "build": "babel-node src/index.js --server --client",
-    "start": "babel-node build/server.js",
+    "start": "node build/server.js",
     "lint": "eslint ."
   },
   "author": "",
