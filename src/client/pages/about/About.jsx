@@ -1,13 +1,29 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import {fetchBannerAction} from "./duck/actions";
+import {connect} from "react-redux";
+import BannerAboutContainer from './containers/BannerAboutContainer'
+import Helmet from 'react-helmet';
 
 class About extends Component {
-  render() {
-    return (
-      <div className="About">
-        <h1>This is About page</h1>
-      </div>
-    );
-  }
+    componentWillMount() {
+        //Use for ssr saga
+        // if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
+        this.props.dispatch(fetchBannerAction('home_slideshow'))
+        // }
+    }
+
+    render() {
+        return (
+            <div className="About">
+                <Helmet title="About"
+                        meta={[
+                            {name: 'description', content: 'Description'}
+                        ]}/>
+                <h1>This is About page</h1>
+                <BannerAboutContainer/>
+            </div>
+        );
+    }
 }
 
-export default About;
+export default connect(state => state, null)(About);

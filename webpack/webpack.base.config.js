@@ -7,10 +7,10 @@ const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 // const staticAssetName = true
 //     ? '[path][name].[ext]?[hash:8]'
 //     : '[hash:8].[ext]';
-const isVerbose = true;
+const isVerbose = false;
 const webpack_base_config = {
     //development or production: production webpack sẽ auto optimize
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    mode: process.env.NODE_ENV === 'development' ? 'development' : 'production',
     resolve: {
         extensions: ['.js', '.jsx']
     },
@@ -20,7 +20,10 @@ const webpack_base_config = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV),
             }
         }),
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.NamedModulesPlugin(),
     ],
     module: {
         rules: [

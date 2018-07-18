@@ -1,58 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import serialize from 'serialize-javascript';
-import config from '../config';
 
 /* eslint-disable react/no-danger */
 
 class Html extends React.Component {
-  // static propTypes = {
-  //   title: PropTypes.string.isRequired,
-  //   description: PropTypes.string.isRequired,
-  //   styles: PropTypes.arrayOf(
-  //     PropTypes.shape({
-  //       id: PropTypes.string.isRequired,
-  //       cssText: PropTypes.string.isRequired,
-  //     }).isRequired,
-  //   ),
-  //   scripts: PropTypes.arrayOf(PropTypes.string.isRequired),
-  //   app: PropTypes.object, // eslint-disable-line
-  //   children: PropTypes.string.isRequired,
-  // };
-  //
-  // static defaultProps = {
-  //   styles: [],
-  //   scripts: [],
-  // };
+    static propTypes = {
+        helmet: PropTypes.object,
+        // description: PropTypes.string,
+        // styles: PropTypes.arrayOf(
+        //   PropTypes.shape({
+        //     id: PropTypes.string.isRequired,
+        //     cssText: PropTypes.string.isRequired,
+        //   }).isRequired,
+        // ),
+        styles: PropTypes.arrayOf(PropTypes.string.isRequired),
+        scripts: PropTypes.arrayOf(PropTypes.string.isRequired),
+        app: PropTypes.object, // eslint-disable-line
+        children: PropTypes.string.isRequired,
+        initial_state: PropTypes.object
+    };
 
-  render() {
-    const { title, description, styles, scripts, app, children } = this.props;
-    return (
-      <html className="no-js" lang="en">
-        <head>
-          <meta charSet="utf-8" />
-          <meta httpEquiv="x-ua-compatible" content="ie=edge" />
-          <title>{title}</title>
-          <meta name="description" content={description} />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          {scripts.map(script => (
-            <link key={script} rel="preload" href={script} as="script" />
-          ))}
-          {styles.map(style => (
-            <style
-              key={style.id}
-              id={style.id}
-              dangerouslySetInnerHTML={{ __html: style.cssText }}
+    static defaultProps = {
+        styles: [],
+        scripts: [],
+    };
+
+    render() {
+        const {helmet, styles, scripts, app, children, initial_state} = this.props;
+        return (
+            <html className="no-js" lang="en">
+            <head>
+                <meta charSet="utf-8"/>
+                <meta httpEquiv="x-ua-compatible" content="ie=edge"/>
+                {helmet.title.toComponent()}
+                {helmet.base.toComponent()}
+                {helmet.meta.toComponent()}
+                {helmet.link.toComponent()}
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+                {scripts.map(script => (
+                    <link key={script} rel="preload" href={script} as="script"/>
+                ))}
+                {styles.map(style => (
+                    <link key={style} rel="stylesheet" href={style}/>
+                ))}
+            </head>
+            <body>
+            <div id="root" suppressHydrationWarning dangerouslySetInnerHTML={{__html: children}}/>
+            {/*<script*/}
+            {/*dangerouslySetInnerHTML={{__html: `window.App=${serialize(app)}`}}*/}
+            {/*/>*/}
+            <script
+                dangerouslySetInnerHTML={{__html: `window.__INITIAL_STATE__ = ${serialize(initial_state)}`}}
             />
-          ))}
-        </head>
-        <body>
-          <div id="app" dangerouslySetInnerHTML={{ __html: children }} />
-          <script
-            dangerouslySetInnerHTML={{ __html: `window.App=${serialize(app)}` }}
-          />
-          {scripts.map(script => <script key={script} src={script} />)}
-          {/*{config.analytics.googleTrackingId && (
+            {scripts.map(script => <script key={script} src={script}/>)}
+            {/*{config.analytics.googleTrackingId && (
             <script
               dangerouslySetInnerHTML={{
                 __html:
@@ -70,10 +73,10 @@ class Html extends React.Component {
               defer
             />
           )}*/}
-        </body>
-      </html>
-    );
-  }
+            </body>
+            </html>
+        );
+    }
 }
 
 export default Html;

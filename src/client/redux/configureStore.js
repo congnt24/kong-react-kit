@@ -6,6 +6,7 @@ import {routerReducer, routerMiddleware, push} from 'react-router-redux'
 import createSagaMiddleware, {END} from 'redux-saga'
 // create the saga middleware
 import homeReducer from '../pages/home/duck/reducers';
+import aboutReducer from '../pages/about/duck/reducers';
 
 export default function configureStore(initialState) {
     const sagaMiddleware = createSagaMiddleware();
@@ -15,7 +16,7 @@ export default function configureStore(initialState) {
         thunk,//We are using redux-thunk for using async actions
         routerMiddleware(history)
     ];
-    const reducers = {homeReducer};
+    const reducers = {homeReducer, aboutReducer};
     const composedEnhancers = composeWithDevTools(
         applyMiddleware(...middleware),
         ...enhancers

@@ -12,20 +12,25 @@ import VntripServices from "./components/VntripServices";
 import HotPlaces from "./components/HotPlaces";
 import Loadable from 'react-loadable';
 
-
 class Home extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
-    componentWillMount(){
-        this.props.dispatch(fetchBannerAction('home_slideshow'))
+
+    componentWillMount() {
+        //Use for ssr saga
+        // if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
+            this.props.dispatch(fetchBannerAction('home_slideshow'))
+        // } else {
+        //     window.__INITIAL_STATE__ = undefined
+        // }
     }
 
     render() {
         return (
             <Layout test_prop="kghkjhjk">
                 <div>
-                    <BannerHomeContainer />
+                    <BannerHomeContainer/>
                     <VntripServices/>
                     <HotPlaces/>
                     <Link to="/about">About</Link>

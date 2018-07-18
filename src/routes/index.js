@@ -1,25 +1,40 @@
 import Home from "../client/pages/home/Home";
 import About from "../client/pages/about/About";
 import RootRouter from "../client/containers/RootRouter";
+import NotFound from "../commons/NotFound";
 
 const main_routes = [
-    { component: RootRouter,
+    {
+        component: RootRouter,
         routes: [
-            { path: '/',
+            {
+                path: '/',
                 exact: true,
                 component: Home
             },
-            { path: '/home',
+            {
+                path: '/home',
+                exact: true,
                 component: Home,
+                title: 'fjkshgjdhfsjkghdfskjhjkdfshgjkdfs',
                 routes: [
-                    { path:  '/home/about',
+                    {
+                        path: '/home/about',
+                        exact: true,
                         component: About
                     }
                 ]
             },
-            { path: '/about',
+            {
+                path: '/about',
+                exact: true,
                 component: About
+            },
+            {
+                path: '*',
+                component: NotFound
             }
+
         ]
     }
 ];

@@ -1,122 +1,122 @@
+import path from 'path';
+import logger from 'morgan';
+import favicon from 'serve-favicon';
 import configureStore from "../client/redux/configureStore";
-
-const express = require('express');
 import React from 'react';
-import {renderToString} from 'react-dom/server';
+import {renderToString, renderToStaticMarkup} from 'react-dom/server';
 import {StaticRouter} from 'react-router-dom';
 import {matchRoutes, renderRoutes} from 'react-router-config';
 import main_routes from "../routes/index";
 import {Provider} from 'react-redux';
+import Loadable from 'react-loadable';
+import rootSaga from "../client/redux/rootSagas";
+import Html from "../commons/Html";
+import Helmet from 'react-helmet'
+import helmet from 'helmet'
+import assets from '../../assets.json'
 
+const express = require('express');
 const port = process.env.PORT || 3000;
 const app = express();
 const config = require('../configs');
-import Loadable from 'react-loadable';
+let prototype = require('../utils/prototype');
 
-let template_html = fs.readFileSync(path.resolve('./public/index.html'), 'utf-8');
+if (process.env.NODE_ENV === 'development') {
+//SETUP HMR express
+    const webpack = require('webpack');
+    const webpackConfig = require('../../webpack/webpack.config');
+    const compiler = webpack(webpackConfig);
+// webpack hmr
+    app.use(
+        require('webpack-dev-middleware')(compiler, {
+            noInfo: true,
+            publicPath: webpackConfig.output.publicPath
+        })
+    );
+    app.use(require('webpack-hot-middleware')(compiler, {
+        log: console.log,
+        path: "/__webpack_hmr",
+        heartbeat: 10 * 1000
+    }));
+}
+//SETUP seo
+app.use(helmet());
+app.use(logger('dev', {skip: (req, res) => res.statusCode < 400}));
+app.use(favicon(path.resolve(process.cwd(), 'public/favicon.ico')));
 
+// if (__DEV__) {
+app.use(express.static(path.resolve(process.cwd(), 'build'), {index: '_'}));
+// } else {
+//     /* Run express as webpack dev server */
+//     const webpack = require('webpack');
+//     const webpackConfig = require('../tools/webpack/config.babel');
+//     const compiler = webpack(webpackConfig);
+//
+//     compiler.apply(new webpack.ProgressPlugin());
+//
+//     app.use(
+//         require('webpack-dev-middleware')(compiler, {
+//             publicPath: webpackConfig.output.publicPath,
+//             headers: { 'Access-Control-Allow-Origin': '*' },
+//             hot: true,
+//             quiet: true, // Turn it on for friendly-errors-webpack-plugin
+//             noInfo: true,
+//             stats: 'minimal',
+//             serverSideRender: true
+//         })
+//     );
+//
+//     app.use(
+//         require('webpack-hot-middleware')(compiler, {
+//             log: false // Turn it off for friendly-errors-webpack-plugin
+//         })
+//     );
+// }
 // express will serve up index.html if it doesn't recognize the route
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
+    // const branch = matchRoutes(main_routes, req.path);
     const store = configureStore();
-    store.runSaga(mySaga).done.then(() => {
-        let context = {};
-        let content = renderToString(
-            <Provider store={store}>
-                <StaticRouter location={req.url} context={context}>
-                    {renderRoutes(main_routes)}
-                </StaticRouter>
-            </Provider>
-        );
+    let content = '';
+    let context = {};
+    store.runSaga(rootSaga).done.then(() => {
+        const data = {};
+        data.helmet = Helmet.renderStatic();
+        data.children = content;
+        const css = new Set();
+        const scripts = new Set();
+        for (let key of Object.keys(assets)) {
+            let asset = assets[key];
+            if (asset['js']) {
+                scripts.add(asset['js']);
+            }
+            if (asset['css']) {
+                css.add(asset['css']);
+            }
+        }
 
-        content = template_html.replace('<!--REPLACE_ME-->', content)
-            .replace('<!--REPLACE_SCRIPT-->', `<script>window.__INITIAL_STATE = ${JSON.stringify(JSON.stringify(store.getState()))};</script>`);
-
-        res.send(content)
-
+        data.scripts = Array.from(scripts);
+        data.styles = Array.from(css);
+        data.initial_state = store.getState();
+        const html = renderToStaticMarkup(<Html {...data} />);
+        res.status(200);
+        res.send(`<!doctype html>${html}`);
     });
 
-    let content = renderToString(
+    content = renderToString(
         <Provider store={store}>
-            <StaticRouter location={req.url} context={{}}>
+            <StaticRouter location={req.url} context={context}>
                 {renderRoutes(main_routes)}
             </StaticRouter>
         </Provider>
     );
+    if (context.status === 404) {
+        res.status(404);
+    }
+    if (context.status === 302) {
+        res.redirect(302, context.url);
+    }
     store.close()
-    /*
-        try {
-            const css = new Set();
-
-            // Enables critical path CSS rendering
-            // https://github.com/kriasoft/isomorphic-style-loader
-            const insertCss = (...styles) => {
-                // eslint-disable-next-line no-underscore-dangle
-                styles.forEach(style => css.add(style._getCss()));
-            };
-
-            // Universal HTTP client
-            const fetch = createFetch(nodeFetch, {
-                baseUrl: config.api.serverUrl,
-                cookie: req.headers.cookie,
-                schema,
-                graphql,
-            });
-
-            // Global (context) variables that can be easily accessed from any React component
-            // https://facebook.github.io/react/docs/context.html
-            const context = {
-                insertCss,
-                fetch,
-                // The twins below are wild, be careful!
-                pathname: req.path,
-                query: req.query,
-            };
-
-            const route = await router.resolve(context);
-
-            if (route.redirect) {
-                res.redirect(route.status || 302, route.redirect);
-                return;
-            }
-
-            const data = { ...route };
-            data.children = ReactDOM.renderToString(
-                <App context={context}>{route.component}</App>,
-            );
-            data.styles = [{ id: 'css', cssText: [...css].join('') }];
-
-            const scripts = new Set();
-            const addChunk = chunk => {
-                if (chunks[chunk]) {
-                    chunks[chunk].forEach(asset => scripts.add(asset));
-                } else if (__DEV__) {
-                    throw new Error(`Chunk with name '${chunk}' cannot be found`);
-                }
-            };
-            addChunk('client');
-            if (route.chunk) addChunk(route.chunk);
-            if (route.chunks) route.chunks.forEach(addChunk);
-
-            data.scripts = Array.from(scripts);
-            data.app = {
-                apiUrl: config.api.clientUrl,
-            };
-
-            const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);
-            res.status(route.status || 200);
-            res.send(`<!doctype html>${html}`);
-        } catch (err) {
-            next(err);
-        }
-        */
-
-
 });
-
-app.use(express.static('build'));
-const renderSSR = function (req, res) {
-
-}
 
 Loadable.preloadAll().then(() => {
     app.listen(port, () => console.log(`Listening on port ${port}`));

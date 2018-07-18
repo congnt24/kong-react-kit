@@ -22,3 +22,4 @@ yarn-error.log*
 # Webstorm
 .idea/
 .build
+assets.json

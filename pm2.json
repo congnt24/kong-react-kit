@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "script": "./build/server.js",
+      "name": "server-name",
+      "interpreter": "babel-node",
+      "out_file": "/dev/null",
+      "error_file": "/dev/null",
+      "exec_mode": "fork",
+      "node_args": "--max-old-space-size=1024"
+    }
+  ]
+}

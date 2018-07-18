@@ -1,0 +1,8 @@
+/**
+ * Created by congnt on 6/16/18.
+ */
+"use strict";
+
+export const FETCH_BANNER_ABOUT = 'FETCH_BANNER_ABOUT';
+export const FETCH_BANNER_SUCCESS_ABOUT = 'FETCH_BANNER_SUCCESS_ABOUT';
+export const FETCH_BANNER_ERROR_ABOUT = 'FETCH_BANNER_ERROR_ABOUT';

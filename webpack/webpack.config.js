@@ -22,7 +22,7 @@ module.exports = {
     //development or production: production webpack sẽ auto optimize
     //'react-hot-loader/patch': sử dụng để hot loader
     entry: {
-        client: ['react-hot-loader/patch', 'babel-polyfill', './src/client/index.js'],
+        client: ['react-hot-loader/patch', 'babel-polyfill', './src/client/index.js', 'webpack-hot-middleware/client'],
         // vendors: ['react', 'react-dom', 'react-router-dom', 'lodash', 'moment']
     },
     output: {

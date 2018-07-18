@@ -10,8 +10,8 @@ import Loading from "../../../components/loading/Loading";
 
 const mapStateToProps = (state) => {
     let banners = [];
-    if (state.homeReducer.banners) {
-        banners = state.homeReducer.banners.map(bn => ({id: bn.id, ...bn.medias.filter(i => i.screen_type === 'WIDESCREEN')[0]}))
+    if (state.aboutReducer.banners) {
+        banners = state.aboutReducer.banners.map(bn => ({id: bn.id, ...bn.medias.filter(i => i.screen_type === 'WIDESCREEN')[0]}))
     }
     return {
         banners
@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 };
 
 const BannerHome = Loadable({
-    loader: () => import('../components/BannerHome'),
+    loader: () => import('../../home/components/BannerHome'),
     loading: Loading
 });
 export default connect(mapStateToProps, null)(BannerHome);

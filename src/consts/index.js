@@ -1,13 +1,13 @@
 let envconsts;
 switch (process.env.NODE_ENV){
     case 'production':
-        envconsts = require('./production');
+        envconsts = require('../configs/production');
         break;
     case 'staging':
-        envconsts = require('./staging');
+        envconsts = require('../configs/staging');
         break;
     default:
-        envconsts = require('./test');
+        envconsts = require('../configs/test');
         break;
 }
 const consts = {
