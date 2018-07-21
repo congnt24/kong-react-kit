@@ -24,15 +24,7 @@ module.exports = {
                 // include: paths.appSrc,
                 exclude: /node_module/,
                 use: [
-                    {
-                        loader: "css-loader", // translates CSS into CommonJS
-                        options: {
-                            modules: true,
-                            camelCase: true,
-                            sourceMap: true,
-                            localIdentName: "[local]___[hash:base64:5]"
-                        }
-                    },
+                    'css-loader',
                     'sass-loader'
                 ]
             },

@@ -68,15 +68,7 @@ module.exports = {
                 use: [
                     // 'style-loader',
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader: "css-loader", // translates CSS into CommonJS
-                        options: {
-                            modules: true,
-                            camelCase: true,
-                            sourceMap: true,
-                            localIdentName: "[local]___[hash:base64:5]"
-                        }
-                    },
+                    'css-loader',
                     'sass-loader'
                 ]
             },

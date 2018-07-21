@@ -9,9 +9,9 @@ import Loadable from "react-loadable";
 class About extends Component {
     componentWillMount() {
         //Use for ssr saga
-        if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
+        // if (typeof window === 'undefined' || !window.__INITIAL_STATE__) {
         this.props.dispatch(fetchBannerAction('home_slideshow'))
-        }
+        // }
     }
 
     render() {

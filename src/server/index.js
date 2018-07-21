@@ -23,7 +23,6 @@ const port = process.env.PORT || 3000;
 const app = express();
 const config = require('../configs');
 let prototype = require('../utils/prototype');
-console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
 
 if (process.env.NODE_ENV === 'development') {
 //SETUP HMR express
@@ -50,9 +49,6 @@ app.use(helmet());
 app.use(logger('dev', {skip: (req, res) => res.statusCode < 400}));
 app.use(favicon(path.resolve(process.cwd(), 'public/favicon.ico')));
 
-// if (__DEV__) {
-
-
 // express will serve up index.html if it doesn't recognize the route
 app.get('*', (req, res, next) => {
     // const branch = matchRoutes(main_routes, req.path);
@@ -75,18 +71,16 @@ app.get('*', (req, res, next) => {
         for (let key of Object.keys(assets)) {
             let asset = assets[key];
             if (asset['js']) {
-                // scripts.add(asset['js']);
+                scripts.add(asset['js']);
             }
             if (asset['css']) {
                 css.add(asset['css']);
             }
         }
 
-        data.scripts = Array.from(scripts);
+        data.scripts = Array.from(scripts).flatten();
         data.styles = Array.from(css).flatten();
         data.initial_state = store.getState();
-        console.log(data, 'data');
-        
         const html = renderToStaticMarkup(<Html {...data} />);
         res.status(200);
         res.send(`<!doctype html>${html}`);
