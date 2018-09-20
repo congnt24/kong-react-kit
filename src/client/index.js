@@ -5,13 +5,13 @@ import {AppContainer} from 'react-hot-loader'
 
 
 import {Provider} from 'react-redux';
-import store from './redux/store';
-
-
+import configureStore from './redux/configureStore';
+// import rootSaga from "./redux/rootSagas";
+// configureStore.runSaga(rootSaga);
 //Đây là entry point của webpack -> webpack sẽ compile từ file này dựa trên file html_template
 //Để sử dụng hot loader, ta bọc component app bởi AppContainer. Khi nào code thay đổi, ta sẽ render lại APP
 let render = (Component) => ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={configureStore()}>
         <AppContainer>
             <Component/>
         </AppContainer>

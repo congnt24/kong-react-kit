@@ -1,5 +1,4 @@
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
-import messageReducer from './reducers/message'
 import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension';
 import history from "../../commons/history";
@@ -15,7 +14,7 @@ const middleware = [
     thunk,//We are using redux-thunk for using async actions
     routerMiddleware(history)
 ];
-const reducers = {messageReducer, homeReducer};
+const reducers = {homeReducer};
 
 const composedEnhancers = composeWithDevTools(
     applyMiddleware(...middleware),

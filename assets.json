@@ -9,7 +9,11 @@
   "": {
     "js": "/0.js",
     "ico": "/favicon.ico",
-    "html": "/index.html"
+    "html": "/index.html",
+    "json": [
+      "/8d37ad4bd97f91b37ce9.hot-update.json",
+      "/1f06d7b402a5ae098d2e.hot-update.json"
+    ]
   },
   "metadata": {
     "author": "kongnt89"
